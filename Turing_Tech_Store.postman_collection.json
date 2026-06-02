@@ -1,0 +1,354 @@
+{
+  "info": {
+    "_postman_id": "8b51d8de-07d0-4a8b-9e2b-f11a43a0e6db",
+    "name": "Turing Tech Store API",
+    "description": "Colección de endpoints para probar la API RESTful de la tienda Turing Tech Store con esquema de 3 tablas.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Registrar Usuario (User)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"nuevo_cliente\",\n  \"email\": \"cliente@turingtech.com\",\n  \"password\": \"cliente123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            },
+            "description": "Registra una cuenta de usuario normal en el sistema."
+          },
+          "response": []
+        },
+        {
+          "name": "Iniciar Sesión (Login)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.success && jsonData.data.token) {",
+                  "    pm.environment.set(\"jwt_token\", jsonData.data.token);",
+                  "    console.log(\"Token guardado automáticamente en la variable jwt_token\");",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identifier\": \"admin\",\n  \"password\": \"admin123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Inicia sesión con credenciales válidas y retorna un token JWT."
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener Perfil Actual (Me)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/auth/me",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "me"
+              ]
+            },
+            "description": "Obtiene la información del usuario logueado usando el token Bearer JWT."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Categorías y Catálogo",
+      "item": [
+        {
+          "name": "Obtener Categorías",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/categories",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "categories"
+              ]
+            },
+            "description": "Obtiene todas las categorías tecnológicas registradas."
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener Catálogo (Productos)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/products?page=1&limit=6&sort=newest",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Página"
+                },
+                {
+                  "key": "limit",
+                  "value": "6",
+                  "description": "Límite por página"
+                },
+                {
+                  "key": "sort",
+                  "value": "newest",
+                  "description": "Filtro de orden: newest | price_asc | price_desc | name_asc"
+                },
+                {
+                  "key": "category",
+                  "value": "1",
+                  "description": "Filtrar por ID de Categoría (Opcional)",
+                  "disabled": true
+                },
+                {
+                  "key": "search",
+                  "value": "Ryzen",
+                  "description": "Buscar por nombre o descripción (Opcional)",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Retorna una lista filtrada, ordenada y paginada de productos tecnológicos."
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener Producto por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/products/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "products",
+                "1"
+              ]
+            },
+            "description": "Obtiene la ficha detallada de un producto tecnológico específico."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin CRUD",
+      "item": [
+        {
+          "name": "Crear Producto",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Intel Core i7-14700K\",\n  \"description\": \"Procesador premium de alto rendimiento térmico e hibridación inteligente.\",\n  \"specifications\": \"Núcleos: 20 (8 P-cores + 12 E-cores) | Hilos: 28 | Frecuencia: 5.6 GHz | TDP: 125W\",\n  \"price\": 399.00,\n  \"stock\": 10,\n  \"image_url\": \"https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=600&auto=format&fit=crop&q=60\",\n  \"category_id\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/products",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "products"
+              ]
+            },
+            "description": "Permite agregar un nuevo producto tecnológico. Requiere token de rol Administrador."
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar Producto",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Intel Core i7-14700K (Edición Modificada)\",\n  \"description\": \"Procesador premium de alto rendimiento modificado térmicamente.\",\n  \"specifications\": \"Núcleos: 20 | Hilos: 28 | Frecuencia Boost: 5.6 GHz | TDP: 125W\",\n  \"price\": 385.00,\n  \"stock\": 14,\n  \"image_url\": \"https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=600&auto=format&fit=crop&q=60\",\n  \"category_id\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/products/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "products",
+                "1"
+              ]
+            },
+            "description": "Edita los datos de un producto existente. Requiere token de rol Administrador."
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar Producto",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/products/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "products",
+                "1"
+              ]
+            },
+            "description": "Elimina un producto del inventario. Requiere token de rol Administrador."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
