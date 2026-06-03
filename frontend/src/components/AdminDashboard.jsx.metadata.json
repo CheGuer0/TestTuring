@@ -1,0 +1,5 @@
+{
+  "artifactType":  "ARTIFACT_TYPE_OTHER",
+  "summary":  "Revert backup AdminDashboard.jsx to use original 3-table structure (remove brands dependencies).",
+  "updatedAt":  "2026-06-02T20:36:15.159283900Z"
+}
