@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_BASE_URL } from '../config';
 import './AdminDashboard.css';
 
 export default function AdminDashboard() {
@@ -26,7 +27,7 @@ export default function AdminDashboard() {
     setLoading(true);
     setError('');
     try {
-      const catRes = await fetch('http://localhost:5000/api/categories');
+      const catRes = await fetch(`${API_BASE_URL}/api/categories`);
       const catJson = await catRes.json();
       if (catJson.success) {
         setCategories(catJson.data.categories);
@@ -35,7 +36,7 @@ export default function AdminDashboard() {
         }
       }
 
-      const prodRes = await fetch('http://localhost:5000/api/products?page=1&limit=100');
+      const prodRes = await fetch(`${API_BASE_URL}/api/products?page=1&limit=100`);
       const prodJson = await prodRes.json();
       if (prodJson.success) {
         setProducts(prodJson.data.products);
@@ -83,7 +84,7 @@ export default function AdminDashboard() {
 
     const token = localStorage.getItem('turing_token');
     try {
-      const response = await fetch(`http://localhost:5000/api/products/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/products/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -108,8 +109,8 @@ export default function AdminDashboard() {
     const token = localStorage.getItem('turing_token');
 
     const url = editingProduct 
-      ? `http://localhost:5000/api/products/${editingProduct.id}`
-      : 'http://localhost:5000/api/products';
+      ? `${API_BASE_URL}/api/products/${editingProduct.id}`
+      : `${API_BASE_URL}/api/products`;
 
     const method = editingProduct ? 'PUT' : 'POST';
 

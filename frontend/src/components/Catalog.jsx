@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ProductCard from './ProductCard';
+import { API_BASE_URL } from '../config';
 import './Catalog.css';
 
 export default function Catalog() {
@@ -32,7 +33,7 @@ export default function Catalog() {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/categories');
+      const response = await fetch(`${API_BASE_URL}/api/categories`);
       const json = await response.json();
       if (json.success) {
         setCategories(json.data.categories);
@@ -46,7 +47,7 @@ export default function Catalog() {
     setLoading(true);
     setError('');
     try {
-      let url = `http://localhost:5000/api/products?page=${pageNum}&limit=6`;
+      let url = `${API_BASE_URL}/api/products?page=${pageNum}&limit=6`;
       if (activeCategory) {
         url += `&category=${activeCategory}`;
       }

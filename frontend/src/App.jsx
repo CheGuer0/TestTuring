@@ -7,6 +7,7 @@ import Team from './components/Team';
 import Footer from './components/Footer';
 import LoginModal from './components/LoginModal';
 import AdminDashboard from './components/AdminDashboard';
+import { API_BASE_URL } from './config';
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -19,7 +20,7 @@ export default function App() {
       if (!token) return;
 
       try {
-        const response = await fetch('http://localhost:5000/api/auth/me', {
+        const response = await fetch(`${API_BASE_URL}/api/auth/me`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }

@@ -66,7 +66,6 @@ export default function ProductCard({ product }) {
           <button 
             className="btn btn-primary card-action-btn"
             disabled={product.stock <= 0}
-            onClick={() => alert(`¡Añadido al carrito: ${product.name}!\n(Funcionalidad demostrativa)`)}
           >
             {product.stock <= 0 ? 'Agotado' : 'Comprar'}
           </button>

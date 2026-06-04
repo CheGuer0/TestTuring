@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { API_BASE_URL } from '../config';
 import './LoginModal.css';
 
 export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
@@ -27,8 +28,8 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
     setLoading(true);
 
     const url = isLoginTab 
-      ? 'http://localhost:5000/api/auth/login' 
-      : 'http://localhost:5000/api/auth/register';
+      ? `${API_BASE_URL}/api/auth/login` 
+      : `${API_BASE_URL}/api/auth/register`;
 
     const payload = isLoginTab 
       ? { identifier, password } 
